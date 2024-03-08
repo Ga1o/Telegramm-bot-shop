@@ -45,7 +45,7 @@ async def help_handler(message: types.Message):
 
 
 @dp.callback_query(F.data == 'show_catalog')
-async def add_new_func(callback: types.CallbackQuery):
+async def show_catalog_func(callback: types.CallbackQuery):
     builder = InlineKeyboardBuilder()
     electro_button = InlineKeyboardButton(text='Electro', callback_data='electro_button')
     home_button = InlineKeyboardButton(text='Home', callback_data='home_button')
@@ -55,6 +55,108 @@ async def add_new_func(callback: types.CallbackQuery):
 
     try:
         await callback.message.answer('Pick the group which you need to see:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'electro_button')
+async def electro_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    smartphones_button = InlineKeyboardButton(text='Smartphones', callback_data='smartphones_button')
+    laptops_button = InlineKeyboardButton(text='Laptops', callback_data='laptops_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(smartphones_button, laptops_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'smartphones_button')
+async def smartphones_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    apple_smartphones_button = InlineKeyboardButton(text='Apple', callback_data='apple_smartphones_button')
+    android_smartphones_button = InlineKeyboardButton(text='Android', callback_data='android_smartphones_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(apple_smartphones_button, android_smartphones_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'laptops_button')
+async def laptops_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    apple_laptops_button = InlineKeyboardButton(text='Mac OS', callback_data='apple_laptops_button')
+    windows_laptops_button = InlineKeyboardButton(text='Windows', callback_data='windows_laptops_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(apple_laptops_button, windows_laptops_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'home_button')
+async def home_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    furniture_button = InlineKeyboardButton(text='Furniture', callback_data='furniture_button')
+    bathroom_button = InlineKeyboardButton(text='Bathroom', callback_data='bathroom_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(furniture_button, bathroom_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'furniture_button')
+async def furniture_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    chairs_button = InlineKeyboardButton(text='Chairs', callback_data='chairs_button')
+    beds_button = InlineKeyboardButton(text='Beds', callback_data='beds_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(chairs_button, beds_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'bathroom_button')
+async def bathroom_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+    toilets_button = InlineKeyboardButton(text='Toilets', callback_data='toilets_button')
+    shower_cabins_button = InlineKeyboardButton(text='Shower cabins', callback_data='shower_cabins_button')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(toilets_button, shower_cabins_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the category which you need:',
                                       reply_markup=builder.as_markup())
 
     except TypeError:
