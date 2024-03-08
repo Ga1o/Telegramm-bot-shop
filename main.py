@@ -9,13 +9,32 @@ from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.markdown import hbold
 
+from db_conn import session, User
 
-TOKEN = '6717982152:AAG6Ii59GFng3cJgJ3CYNh5grAe_6H9F01k'
+
+TOKEN = '**************'
 dp = Dispatcher()
 
 
 @dp.message(CommandStart())
 async def start_handler(message: types.Message):
+    user_id = message.from_user.id
+    try:
+        user = session.query(User).filter_by(user_id=user_id).first()
+        if not user and message.from_user.first_name != 'Aiogram_test':
+            user = User(user_id=user_id, first_name=message.from_user.first_name, last_name=message.from_user.last_name,
+                        full_name=message.from_user.full_name, user_name=message.from_user.username,
+                        language_code=message.from_user.language_code)
+            try:
+                session.add(user)
+                session.commit()
+
+            except ConnectionError:
+                await message.answer('DB ERROR. USER DON`T ADD. TRY AGAIN.')
+
+    except ConnectionError:
+        await message.answer('DB ERROR. USER DON`T SELECTED. TRY AGAIN.')
+
     builder = InlineKeyboardBuilder()
     show_catalog = InlineKeyboardButton(text='Show catalog', callback_data='show_catalog')
     builder.row(show_catalog)
