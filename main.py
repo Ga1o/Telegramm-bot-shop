@@ -10,9 +10,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.utils.markdown import hbold
 
 from db_conn import session, User
+from products import apple_laptops, windows_laptops
 
 
-TOKEN = '**************'
+TOKEN = '**********************'
 dp = Dispatcher()
 
 
@@ -125,6 +126,75 @@ async def laptops_func(callback: types.CallbackQuery):
 
     try:
         await callback.message.answer('Pick the category which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'apple_laptops_button')
+async def apple_laptops_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+
+    products_buttons = []
+    for name, desc_price in apple_laptops.items():
+        products_buttons.append(InlineKeyboardButton(text=f'{list(apple_laptops.keys()).index(name) + 1} | {name} | {desc_price[1]}', callback_data=f'{name}'))
+
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+
+    for i in products_buttons:
+        builder.row(i)
+
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the product which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(F.data == 'windows_laptops_button')
+async def windows_laptops_func(callback: types.CallbackQuery):
+    builder = InlineKeyboardBuilder()
+
+    products_buttons = []
+    for name, desc_price in windows_laptops.items():
+        products_buttons.append(InlineKeyboardButton(text=f'{list(windows_laptops.keys()).index(name) + 1} | {name} | {desc_price[1]}', callback_data=f'{name}'))
+
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+
+    for i in products_buttons:
+        builder.row(i)
+
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer('Pick the product which you need:',
+                                      reply_markup=builder.as_markup())
+
+    except TypeError:
+        await callback.message.answer('Something gone wrong..')
+
+
+@dp.callback_query(lambda callback: callback.data in apple_laptops.keys() or callback.data in windows_laptops.keys())
+async def product_desc_func(callback: types.CallbackQuery):
+    product_name = callback.data
+    product_desc = apple_laptops[callback.data][0] if callback.data in apple_laptops.keys() else windows_laptops[callback.data][0]
+    product_price = apple_laptops[callback.data][1] if callback.data in apple_laptops.keys() else windows_laptops[callback.data][1]
+
+    builder = InlineKeyboardBuilder()
+    buy_it_button = InlineKeyboardButton(text='Buy it', callback_data=f'{product_name}')
+    button_back = InlineKeyboardButton(text='Back to start', callback_data='back_to_start')
+    builder.row(buy_it_button)
+    builder.row(button_back)
+
+    try:
+        await callback.message.answer(f'Description of product:\n\n'
+                                      f'{product_name}\n'
+                                      f'{product_desc}\n\n'
+                                      f'{product_price} $',
                                       reply_markup=builder.as_markup())
 
     except TypeError:
